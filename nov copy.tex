@@ -4,11 +4,14 @@
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{geometry}
+\usepackage{setspace}
 \geometry{margin=1in}
 \setlength{\parindent}{0pt} % Lower paragraph indents
+\setlength{\parskip}{0.5\baselineskip} % Add spacing between paragraphs
+\onehalfspacing % Set line spacing to 1.5
 
-\title{The effectiveness of Lossy compression algorithms}
-\author{Advay Chandorkar}
+\title{\huge The effectiveness of Lossy compression algorithms}
+\author{\Large Advay Chandorkar}
 \date{}
 
 \begin{document}
@@ -16,16 +19,19 @@
 \maketitle
 
 \begin{center}
-How effective are various lossy compression algorithms in terms of quality retention, efficiency, and suitability for different multimedia applications
+{\large How effective are various lossy compression algorithms in terms of quality retention, efficiency, and suitability for different multimedia applications}
 
-\textbf{Subject:} Computer Science
+{\Large \textbf{Subject:} Computer Science}
 
-\textbf{Word Count:} 3007
+{\Large \textbf{Word Count:} 3007}
 \end{center}
 
 \newpage
 
+\begingroup
+\large
 \tableofcontents
+\endgroup
 
 \newpage
 
@@ -202,6 +208,8 @@ This output shows clear ringing around strong edges along with early banding in 
 
 The output image is extremely degraded, showcasing strong compression artifacts, severe loss of fine detail, and extreme loss of legibility for the text on the plane.
 
+\vspace{0.5cm}
+
 \textbf{Table 1. JPEG Compression Results for Kodak Image 20}
 
 \begin{tabular}{|c|c|c|c|c|}
@@ -219,6 +227,8 @@ Quality & File Size (KB) & Compression Ratio & PSNR (dB) & SSIM \\
 10 & 20 & 24.3:1 & 22.0 & 0.726 \\
 \hline
 \end{tabular}
+
+\vspace{0.5cm}
 
 The data shows a clear pattern.
 
@@ -294,6 +304,8 @@ The spectrogram shows heavy degradation. Only the lowest harmonics remain intact
 
 The frequency collapse is severe. Only a narrow band of low frequencies survives. All upper harmonics are removed. The spectrogram resembles a low-band telephone signal. MOS values around 2.0-2.5 correspond to this level of compression.
 
+\vspace{0.5cm}
+
 \textbf{Table 2. MP3 Compression Results}
 
 \begin{tabular}{|c|c|c|c|}
@@ -309,6 +321,8 @@ Bitrate (kbps) & Approx. File Size & Compression Ratio & Expected MOS \\
 16 & ~120 KB & ~90:1 & 2.0-2.5 \\
 \hline
 \end{tabular}
+
+\vspace{0.5cm}
 
 These values reflect the steep decline in quality as bitrate decreases.
 
