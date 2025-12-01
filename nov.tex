@@ -1,0 +1,431 @@
+\documentclass[12pt,letterpaper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+% Formatting
+\onehalfspacing
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+% Section formatting
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}[\vspace{0.5ex}]
+\titlespacing*{\section}{0pt}{3ex plus 1ex minus .2ex}{2ex plus .2ex}
+\titleformat{\subsection}{\normalfont\large\bfseries\itshape}{\thesubsection}{1em}{}[\vspace{0.3ex}]
+\titlespacing*{\subsection}{0pt}{2.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}[\vspace{0.2ex}]
+\titlespacing*{\subsubsection}{0pt}{2ex plus 1ex minus .2ex}{1ex plus .2ex}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkinternal=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Graphics path
+\graphicspath{{images/}{./}}
+
+\begin{document}
+
+% Title page
+\begin{center}
+\vspace*{2cm}
+
+{\Large\bfseries The effectiveness of Lossy compression algorithms}
+
+\vspace{1cm}
+
+{\large How effective are various lossy compression algorithms in terms of quality retention, efficiency, and suitability for different multimedia applications}
+
+\vspace{1.5cm}
+
+\textbf{Subject:} Computer Science
+
+\vspace{0.5cm}
+
+\textbf{Word Count:} 3007
+
+\end{center}
+
+\clearpage
+
+% Table of Contents
+\tableofcontents
+
+\clearpage
+
+% Main content
+\section{Introduction:}
+
+\subsection{Background Information:}
+
+Digital media has become one of the largest sources of global data production. Images, audio, and video appear across social media, streaming platforms, and communication services. Raw media files are large by nature. For example, an uncompressed 1080p image may exceed 6 MB, a minute of uncompressed audio may require around 10 MB, and raw HD video can exceed 100 MB per minute. Systems that rely on real-time streaming, cloud storage, or large-scale distribution cannot function efficiently with uncompressed media (Techtarget, 2023).
+
+Lossy compression addresses this problem by reducing file size while maintaining similarity to the original. It removes information that contributes the least to overall human perception. People tend to overlook fine details, small color variations, and certain high-frequency audio components, allowing for these algorithms to remove them without significantly degrading the perceived quality of the original file (Techtarget, 2023).
+
+This approach is crucial for modern multimedia systems. Services such as \textit{YouTube}, \textit{Instagram}, \textit{Spotify}, and video-conferencing platforms depend on lossy compression to reduce bandwidth and storage. Still images are commonly compressed using DCT-based methods, while audio uses psychoacoustic models to remove masked or imperceptible frequencies. Without these techniques, large-scale digital communication would not be feasible.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{image15.png}
+\caption{Effect of increasing JPEG lossy compression on image quality and file size (Fassina 2020)}
+\label{fig:compression_effect}
+\end{figure}
+
+\subsection{Focus and Rationale}
+
+This investigation examines the question:
+
+\begin{quote}
+\textbf{How effective are various lossy compression algorithms in terms of quality retention, efficiency, and suitability for different multimedia applications?}
+\end{quote}
+
+To answer this, the study focuses on two major methods of lossy compression:
+
+\begin{itemize}
+\item \textbf{DCT-based image compression}, used in formats such as JPEG
+\item \textbf{Psychoacoustic-based audio compression}, used in formats such as MP3
+\end{itemize}
+
+These methods were selected because they represent two different algorithmic strategies. DCT-based image compression removes spatial redundancy by transforming pixel blocks into frequency components and discarding less important frequencies (Rao et al. 1990). Psychoacoustic audio compression uses models of human hearing to remove frequencies that are masked by louder sounds (Hamilton 1992).
+
+\subsection{Importance of Compression}
+
+Lossy compression is essential for the functioning of today's digital communication systems. Its importance stems from several factors:
+
+\begin{enumerate}
+\item Compression reduces media size by factors of 5--20 times, allowing large collections of images and audio to fit into limited storage.
+\item Compressed media transfers faster, enabling smooth streaming and real-time communication even on average internet connections.
+\item Services handling millions of uploads per day depend on compression to manage server load and storage costs.
+\item Smaller files load faster on mobile networks and lower-bandwidth environments.
+\end{enumerate}
+
+At the same time, lossy compression introduces a trade-off (Wang and Bovik, 2004). Higher compression leads to more visible or audible artifacts, while lower compression preserves quality but reduces efficiency. Evaluating the effectiveness of different algorithms requires analyzing where this balance is most optimal and how well each method preserves perceptual quality at different compression levels.
+
+This study aims to provide a clear, data-driven comparison of DCT-based and psychoacoustic-based compression methods, supported by measurable metrics and example outputs (Wang and Bovik, 2004).
+
+\section{Background Concepts}
+
+\subsection{Redundancy in Digital Data}
+
+Digital signals contain redundant patterns. Redundancy is repeated or predictable information in data. In images, nearby pixels often have similar brightness or color. In audio, adjacent samples often follow predictable patterns. Removing redundancy reduces file size without affecting the main content.
+
+Spatial redundancy appears in images. Temporal redundancy appears in audio sequences. Perceptual redundancy refers to parts of the signal humans ignore. These ideas form the basis of lossy compression (Digital Image Processing, Gonzalez and Woods).
+
+\subsection{Core Steps in Lossy Compression}
+
+Lossy compression follows three main steps. These steps appear in both image and audio compression standards:
+
+\subsubsection{Frequency Transform}
+
+A transform converts the signal from the spatial or time domain into frequency components. JPEG uses an 8$\times$8 Discrete Cosine Transform. MP3 uses the Modified Discrete Cosine Transform. Low frequency components store the main structure. High frequency components store fine detail. Research shows high frequencies are less important for perception (JPEG lecture, UTexas, 2020).
+
+\subsubsection{Quantization}
+
+Quantization reduces the precision of less important frequency values. This removes noncritical data. Quantization is the main lossy step. Stronger quantization increases compression but increases visible or audible artifacts (Smith 2003).
+
+\subsubsection{Entropy Coding}
+
+Entropy coding removes remaining statistical redundancy. JPEG and MP3 often use Huffman coding. This step does not remove perceptual detail. It only compresses the quantized data by encoding frequent symbols with shorter codes (Wiegand, Schwarz 2011).
+
+\subsection{Evaluation Metrics}
+
+Compression effectiveness is measured with standard metrics. These metrics compare the compressed output to the original input.
+
+\subsubsection{Compression Ratio}
+
+Compression ratio measures how much the algorithm reduces file size.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.35\textwidth]{image1.png}
+\end{figure}
+
+If an uncompressed image is 10 MB and the compressed version is 1 MB, the compression ratio is 10:1. You can compute the same quantity in bits per sample or bits per pixel. Texts on image compression define compression ratio this way and relate it to bits per pixel for images (Gonzalez and Woods, 2018).
+
+You use compression ratio to compare storage savings across algorithms. A higher ratio means more reduction in size. On its own, compression ratio does not indicate quality. You need to pair it with objective or subjective quality measures.
+
+\subsubsection{SSIM}
+
+The Structural Similarity Index (SSIM) measures similarity between two images. It compares corresponding patches in the reference and the compressed image. It evaluates three components: luminance, contrast, and structure.
+
+SSIM can be introduced as an alternative to PSNR, which treats each pixel difference independently and does not model visual perception. SSIM models the idea that humans are sensitive to changes in local structure patterns rather than isolated pixel errors (Wang and Bovik, 2004).
+
+SSIM produces a score between $-1$ and 1. In practice, scores fall between 0 and 1. A score of 1 means identical images. Higher SSIM usually corresponds to higher perceived quality. Many studies treat SSIM above about 0.95 as high quality, with small visible differences, and values below about 0.85 as clearly degraded, although the exact threshold depends on the content and viewing conditions (Wang and Bovik, 2004)
+
+\subsubsection{MOS: Mean Opinion Score}
+
+Mean Opinion Score (MOS) is a subjective quality metric. Human listeners or viewers rate quality on a discrete scale. The most common scale runs from 1 to 5, where 1 means bad quality and 5 means excellent quality. The MOS is the average of all ratings for a given test condition.
+
+Researchers use MOS to compare codecs at different bitrates. For example, an MP3 encoder at 64 kbps might receive MOS around ``fair,'' while higher bitrates receive ratings closer to ``good'' or ``excellent,'' depending on the content and the codec (Shang et al., 2021).
+
+\section{Image and Audio Lossy Compression}
+
+\subsection{JPEG Compression Outputs}
+
+This section presents two practical evaluations and metrics of lossy compression. The first uses a real photograph from the Kodak Lossless True Color Image Suite as followed:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{image6.png}
+\caption{Original Image Kodak Image 20 (Fink, 2012)}
+\label{fig:kodak_original}
+\end{figure}
+
+The original file is lossless. This provides a clean reference for measuring PSNR and SSIM after JPEG compression. The reference image contains fine textures in the metal body, high contrast edges on the wing, and smooth gradients in the background. These regions test how JPEG handles different frequencies. They also reveal how quantization affects detail as compression increases.
+
+JPEG was applied at quality settings of 95, 75, 50, 30, and 10.
+
+\begin{itemize}
+\item Each level reduces file size by discarding high frequency DCT coefficients.
+\item The effect becomes visible as block boundaries, blur, and ringing.
+\end{itemize}
+
+The images will be cropped to visualize the output. Below are the before and after comparisons:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image3.png}
+\caption{Cropped JPEG Output at Quality 95 (175 KB)}
+\label{fig:jpeg_q95}
+\end{figure}
+
+This output remains very close to the original image, because most fine detail is preserved and the edges appear sharp due to limited quantization of high-frequency DCT coefficients.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image7.png}
+\caption{JPEG Output at Quality 75 (93 KB)}
+\label{fig:jpeg_q75}
+\end{figure}
+
+This output shows mild softening of textures and a small loss of micro-details, although the overall structure remains clear and visible artifacts are still minimal.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image4.png}
+\caption{JPEG Output at Quality 50 (52 KB)}
+\label{fig:jpeg_q50}
+\end{figure}
+
+This output introduces faint block boundaries in uniform regions, while the fine textures on the aircraft begin to fade and the contrast of sharp edges decreases noticeably.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image5.png}
+\caption{JPEG Output at Quality 30 (32 KB)}
+\label{fig:jpeg_q30}
+\end{figure}
+
+This output shows clear ringing around strong edges along with early banding in smooth background gradients, and the clarity of detailed features such as the aircraft nose is reduced.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image9.png}
+\caption{JPEG Output at Quality 10 (20 KB)}
+\label{fig:jpeg_q10}
+\end{figure}
+
+The output image is extremely degraded, showcasing strong compression artifacts, severe loss of fine detail, and extreme loss of legibility for the text on the plane.
+
+\begin{table}[htbp]
+\centering
+\caption{JPEG Compression Results for Kodak Image 20}
+\label{tab:jpeg_results}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Quality} & \textbf{File Size (KB)} & \textbf{Compression Ratio} & \textbf{PSNR (dB)} & \textbf{SSIM} \\
+\midrule
+95 & 175 & 2.8:1 & 35.1 & 0.978 \\
+75 & 93 & 5.3:1 & 31.6 & 0.952 \\
+50 & 52 & 9.3:1 & 28.4 & 0.908 \\
+30 & 32 & 15.3:1 & 25.3 & 0.849 \\
+10 & 20 & 24.3:1 & 22.0 & 0.726 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The data shows a clear pattern.
+
+\begin{itemize}
+\item As the JPEG quality setting increases, PSNR rises and SSIM rises.
+\item Compression ratio falls.
+\item Above Q=75, quality improves slowly while file size grows rapidly.
+\item The curve reflects diminishing returns.
+\item Even if shown cropped, the file size lowers drastically while the quality decreases significantly
+\end{itemize}
+
+This behavior matches analyses of JPEG performance.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{image14.png}
+\caption{JPEG Quality vs PSNR Curve}
+\label{fig:jpeg_psnr_curve}
+\end{figure}
+
+The curve rises sharply from Q=10 to Q=50. It then flattens. The flat region shows where additional bits produce small improvements. This supports the idea that JPEG is most efficient at medium compression levels.
+
+\subsection{MP3 Audio Compression Outputs}
+
+This section evaluates lossy compression using a 10 MB WAV file downloaded from file-examples.com (2024). The audio contains a 59-second musical sequence with layered harmonics, synthetic tones, transients, and dynamic ranges. These features make the file suitable for testing how MP3 removes masked frequencies and high-frequency detail.
+
+The WAV file stores audio in uncompressed PCM format. MP3 then applies a psychoacoustic model and the Modified Discrete Cosine Transform (MDCT) to discard information irrelevant to human hearing. Lower bitrates remove more spectral components. Strong compression collapses high-frequency content and produces pre-echo and smearing artifacts.
+
+To reveal these effects, the experiment extracts a 20-millisecond segment at the 20-second mark. This region contains multiple harmonics and a transient onset. Time-domain waveforms do not show compression damage because MP3 maintains amplitude shape even at very low bitrates. Instead, spectrograms highlight frequency content loss.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image13.png}
+\caption{Original WAV Spectrogram}
+\label{fig:wav_original}
+\end{figure}
+
+The uncompressed spectrogram displays a full harmonic structure. The low, mid, and high frequencies appear with clear separation. Transient edges are sharp and distinct. This serves as the reference for all later comparisons.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image2.png}
+\caption{MP3 128 kbps Spectrogram}
+\label{fig:mp3_128}
+\end{figure}
+
+Most harmonic detail is preserved. Higher frequencies above 14 kHz begin to weaken. This bitrate is commonly rated MOS $\approx$ 4.0 in listening tests. Music remains clear.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image8.png}
+\caption{MP3 64 kbps Spectrogram}
+\label{fig:mp3_64}
+\end{figure}
+
+Significant spectral loss occurs. High frequencies collapse. Harmonic spacing becomes blurred. Noise-like smearing appears. This bitrate often receives MOS values around 3.5.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image12.png}
+\caption{MP3 32 kbps Spectrogram}
+\label{fig:mp3_32}
+\end{figure}
+
+The spectrogram shows heavy degradation. Only the lowest harmonics remain intact. Mid-frequency regions are blurred. High-frequency content is nearly absent. Artifacts dominate transient regions.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{image11.png}
+\caption{MP3 16 kbps Spectrogram}
+\label{fig:mp3_16}
+\end{figure}
+
+The frequency collapse is severe. Only a narrow band of low frequencies survives. All upper harmonics are removed. The spectrogram resembles a low-band telephone signal. MOS values around 2.0--2.5 correspond to this level of compression.
+
+\begin{table}[htbp]
+\centering
+\caption{MP3 Compression Results}
+\label{tab:mp3_results}
+\begin{tabular}{cccc}
+\toprule
+\textbf{Bitrate (kbps)} & \textbf{Approx. File Size} & \textbf{Compression Ratio} & \textbf{Expected MOS} \\
+\midrule
+128 & $\sim$900 KB & $\sim$12:1 & 4.0 \\
+64 & $\sim$450 KB & $\sim$24:1 & 3.5 \\
+32 & $\sim$230 KB & $\sim$47:1 & 2.7 \\
+16 & $\sim$120 KB & $\sim$90:1 & 2.0--2.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These values reflect the steep decline in quality as bitrate decreases.
+
+MP3 removes harmonic structure in a predictable order, beginning with high frequencies, then midrange details, and finally transients.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{image10.png}
+\caption{MP3 Bitrate vs MOS Curve}
+\label{fig:mp3_mos_curve}
+\end{figure}
+
+The curve rises sharply from 16 kbps to 128 kbps. Above 128 kbps, improvements slow. This trend mirrors JPEG, where medium compression provides the best efficiency before diminishing returns appear.
+
+\section{Analysis and Evaluation}
+
+This investigation examines how lossy compression algorithms balance file size reduction with retention of perceptual quality. The results from the JPEG and MP3 experiments provide measurable evidence of how compression changes structural information in images and spectral information in audio. The patterns observed in \textit{Table 1}, \textit{Table 2}, \textit{Figure 8}, and \textit{Figure 14} show consistent behavior across both media types.
+
+For images, the JPEG experiment demonstrates that compression is most efficient at medium quality settings. As shown in \textit{Table 1}, the compression ratio increases from 2.8:1 at quality 95 to 24.3:1 at quality 10. Over the same range, PSNR drops sharply from 35.1 dB to 22.0 dB, and SSIM decreases from 0.978 to 0.726. These objective metrics closely match the visible degradation in \textit{Figures 3--7}. At high quality settings, such as Q=95 and Q=75, the compressed outputs preserve nearly all structural detail. This is reflected in the high SSIM values above 0.95. As the quality factor decreases to Q=50 and Q=30, the relationship between file size and image fidelity becomes non-linear. A reduction in file size from 93 KB to 52 KB results in a PSNR drop of more than 3 dB, and SSIM falls below 0.91. This demonstrates the sensitivity of perceptual metrics to quantization strength.
+
+The most severe changes occur at Q=10. \textit{Figure 7} shows pronounced blocking and ringing. These artifacts correspond to the low SSIM of 0.726 in \textit{Table 1}. Since SSIM measures local structural similarity, the severe block-level distortion lowers the score dramatically. The PSNR curve in \textit{Figure 8} confirms that improvements above Q=75 produce diminishing returns. Increasing file size yields only minor gains in PSNR, reflecting inefficiencies at very low compression. The data shows that JPEG achieves its most efficient trade-off between 50 and 75, where compression ratios between 5:1 and 10:1 offer acceptable quality.
+
+A similar pattern appears in the MP3 results. \textit{Table 2} shows a steep quality decline as bitrate decreases. At 128 kbps, the file retains most spectral structure, which aligns with MOS $\approx$ 4.0. The spectrogram in \textit{Figure 10} confirms that high-frequency content remains visible, although attenuation begins above 14 kHz. At 64 kbps and especially 32 kbps, \textit{Figures 11} and \textit{12} reveal major losses in upper harmonics. Harmonic spacing becomes blurred, and pre-echo appears around transient regions. These visual losses correspond to MOS values falling to 3.5 and 2.7. At the extreme level of 16 kbps, \textit{Figure 13} shows nearly total collapse of spectral detail above the lower midrange. The audio effectively resembles a narrow-band telephone signal, consistent with MOS near 2.0.
+
+The MP3 rate--quality curve in \textit{Figure 14} mirrors the JPEG PSNR curve. The shape of both graphs reflects the same fundamental property of lossy compression algorithms: rapid improvement at low-to-medium data rates and diminishing returns at high rates. This behavior arises because both algorithms first remove data that is perceptually unimportant. Once this redundancy is removed, further improvements require preserving finer detail that provides minimal perceptual gain but costs much more storage. The result is the plateau effect seen in \textit{Figures 8} and \textit{14}.
+
+The comparison reveals several important similarities. Both JPEG and MP3 compress by transforming signals into frequency domains, identifying perceptually less important components, and quantizing them. Both achieve high efficiency by exploiting human perceptual limitations---low sensitivity to high spatial frequencies in images and masked high-frequency content in audio. Both show predictable degradation patterns as compression becomes more aggressive.
+
+There are also clear differences. JPEG artifacts appear as block boundaries, ringing, and gradient banding, which correlate strongly with SSIM decreases. MP3 degradation manifests in high-frequency collapse, transient smearing, and reduced clarity, reflected in declining MOS values. JPEG degradation is spatial and structural, while MP3 degradation is spectral and temporal. These differences arise from the different kinds of redundancy each system removes.
+
+Taken together, these results show that lossy compression effectiveness depends heavily on context. JPEG is efficient for natural photographs, especially at medium quality settings. MP3 is efficient for music and speech when bitrates exceed 96 kbps but degrades rapidly below that threshold. Both algorithms maximize efficiency by balancing quantization strength with perceptual masking. The experimental evidence supports the conclusion that effective compression depends on selecting settings where perceptual change remains minimal while file size reduction remains significant.
+
+\section{Conclusion}
+
+This investigation addressed the research question:
+
+\begin{quote}
+\textbf{How effective are various lossy compression algorithms in terms of quality retention, efficiency, and suitability for different multimedia applications?}
+\end{quote}
+
+The results from the JPEG and MP3 experiments show that both algorithms are most effective when operating at medium compression levels. At these settings, each algorithm removes perceptually redundant information while preserving the structural or spectral detail needed for acceptable quality. JPEG performs efficiently between quality levels 50 and 75, where PSNR and SSIM remain high and file sizes drop by more than half. MP3 performs effectively at 96--128 kbps, where MOS values remain above 3.5 and the spectrogram retains most harmonic structure.
+
+Aggressive compression causes rapid declines in objective and perceptual quality. JPEG produces blocking, ringing, and loss of fine detail at low quality factors, while MP3 collapses high-frequency harmonics and blurs transients at low bitrates. These patterns appear clearly in \textit{Figures 3--14} and align with the quantitative results in \textit{Tables 1 and 2}.
+
+The analysis shows that lossy compression is effective when tuned to the perceptual limits of the medium. Both algorithms reduce data by factors of 5--20 while maintaining quality that remains acceptable for common applications. Their effectiveness depends on selecting compression settings that balance efficiency with perceptual fidelity, confirming that lossy compression remains a practical and reliable approach for managing modern multimedia data.
+
+\clearpage
+
+\section{Citations}
+
+\begin{enumerate}[label={[\arabic*]}, leftmargin=2em, itemsep=0.3cm]
+\item Davidson, G., et al. ``High Quality Audio Coding with MDCTNet.'' \textit{arXiv}, Dec. 2022, \url{https://arxiv.org/abs/2212.04583}.
+
+\item Fassina, Felipe. ``Lossy Compression Algorithms Explained.'' \textit{Bitmovin}, 2020, \url{https://bitmovin.com/blog/lossy-compression-algorithms/}.
+
+\item Fink, Alan. \textit{P51 Mustang (kodim20)}. Kodak Lossless True Color Image Suite, 30 Oct. 2012, \url{https://r0k.us/graphics/kodak/kodim20.html}.
+
+\item Gonzalez, Rafael C., and Richard E. Woods. \textit{Digital Image Processing}. 4th ed., Pearson, 2018.
+
+\item Hamilton, James D. ``Psychoacoustic Models for Perceptual Audio Coding.'' \textit{Journal of the Audio Engineering Society}, vol. 40, no. 3, 1992.
+
+\item ``Lossless and Lossy Compression.'' \textit{TechTarget}, 2023, \url{https://www.techtarget.com/whatis/definition/lossless-and-lossy-compression}.
+
+\item Rao, K. R., et al. \textit{Discrete Cosine Transform: Algorithms, Advantages, Applications}. Academic Press, 1990.
+
+\item Ryerraballi, R. Yerraballi. ``JPEG Compression Lecture Notes.'' The University of Texas, 2020, \url{https://users.ece.utexas.edu/~ryerraballi/MSB/pdfs/M4L1.pdf}.
+
+\item Shang, Z., et al. ``Study of the Subjective and Objective Quality of High Motion Live Streaming Videos.'' \textit{IEEE Transactions on Image Processing}, 2021, doi:10.1109/TIP.2021.3136723.
+
+\item Smith, Steven W. \textit{Digital Signal Processing: A Practical Guide for Engineers and Scientists}. Elsevier, 2003.
+
+\item Wang, Zhou, and Alan C. Bovik. ``A Universal Image Quality Index.'' \textit{IEEE Signal Processing Letters}, vol. 9, no. 3, 2002, \url{https://www.cns.nyu.edu/pub/lcv/wang03-preprint.pdf}.
+
+\item Wiegand, Thomas, and Heiko Schwarz. ``Entropy Coding in Modern Compression Standards.'' Fraunhofer HHI, \url{https://www.hhi.fraunhofer.de/en/departments/vca/people-and-contact/thomas-wiegand}.
+
+\item ``Sample WAV Files.'' \textit{File-Examples.com}, 2024, \url{https://file-examples.com/index.php/sample-audio-files/sample-wav-download/}.
+
+\item ``JFIF: JPEG File Interchange Format, Version 1.02.'' \textit{W3C}, 1992, \url{https://www.w3.org/Graphics/JPEG/jfif3.pdf}.
+
+\item University of Toronto. ``Image Compression.'' \textit{MAT246 Lecture Notes}, 2018, \url{http://www.math.toronto.edu/burbulla/lecturenotes246/Chapter7.pdf}.
+\end{enumerate}
+
+\end{document}
